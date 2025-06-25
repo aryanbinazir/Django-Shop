@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+    <div class="name" >
+        <h3>{{ product.name }}</h3>
+    </div>
+    <small>{{ product.created }}</small>
+    <p>{{ product.price|intcomma }} $</p>
+    <img src="{{ product.image.url }}" style="width: 300px;">
+    <p>{{ product.description|safe }}</p><br/>
+
+    <form action="{% url 'orders:add_cart' product.id %}" method="post">
+        {% csrf_token %}
+        {{ cart_form }}
+        <input type="submit" value="add_cart">
+    </form>
+    <br>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ comment_form }}
+        <br>
+        <input type="submit" value="add_comment">
+    </form>
+    <br>
+    <hr>
+    {% if comments %}
+        {% for comment in comments  %}
+            <div class="card bg-dark text-white">
+            <p class="card-header">{{ comment.user }} | {{ comment.created|timesince }}</p>
+            <p class="card-body">{{ comment.body }}</p>
+
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>There is no comments yet.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+	<h3>Checkout</h3>
+    <h5>user_login: {{ request.user.full_name }}</h5>
+    <h5>order_user: {{ order.user.full_name }}</h5>
+    <p>total: {{ order.get_total_cost|intcomma }} $</p>
+    <a href="{% url 'orders:order_pay' order.id %}" class='btn btn-info'>Pay</a>
+    <br/><br/>
+    <form action="{% url 'orders:coupon_apply' order.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Apply">
+    </form>
+{% endblock %}
